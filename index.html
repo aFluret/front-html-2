@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Национальный Атлас</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="menu">
+                <li><a href="#" id="home-link">Главная</a></li>
+                <li><a href="#" id="atlas-link">Атласы</a></li>
+                <li class="lang-switch">
+                    <span id="ru-btn" class="lang-btn active">RU</span> |
+                    <span id="bel-btn" class="lang-btn">BEL</span>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home-section">
+            <h1 id="intro-title">Добро пожаловать</h1>
+            <p id="intro-text">
+                Национальный Атлас — это современный цифровой ресурс, отражающий географические, экономические и культурные особенности Республики Беларусь.
+            </p>
+        </section>
+
+        <section id="atlas-section" style="display: none;">
+            <h2>Раздел Атласы</h2>
+            <div id="atlas-list" class="atlas-list"></div>
+        </section>
+
+
+
+        
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
