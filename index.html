@@ -38,6 +38,18 @@
 
         
     </main>
+<div id="pdf-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+    <canvas id="modal-pdf-canvas"></canvas>
+    <div class="pdf-controls">
+      <button onclick="prevPage()">←</button>
+      <span id="modal-page-num">1</span> / <span id="modal-page-count">?</span>
+      <button onclick="nextPage()">→</button>
+    </div>
+  </div>
+</div>
+
 
     <script src="script.js"></script>
 </body>

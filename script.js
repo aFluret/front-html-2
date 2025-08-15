@@ -21,9 +21,9 @@ const atlases = [
 // Функция отрисовки атласов
 function renderAtlases() {
     const container = document.getElementById('atlas-list');
-    container.innerHTML = ''; // Очистить
+    container.innerHTML = '';
 
-    atlases.forEach(atlas => {
+    atlases.forEach((atlas) => {
         const card = document.createElement('div');
         card.className = 'atlas-card';
 
@@ -31,18 +31,20 @@ function renderAtlases() {
             <img src="${atlas.cover}" alt="Обложка" class="atlas-cover">
             <div class="atlas-info">
                 <h3>${atlas.title}</h3>
-                <div class="pdf-links">
-                    <a href="${atlas.pdf_bel}" target="_blank" class="pdf-link">PDF BEL</a>
-                    <a href="${atlas.pdf_ru}" target="_blank" class="pdf-link">PDF RU</a>
-                </div>
                 <p class="authors"><strong>Авторы:</strong> ${atlas.authors}</p>
                 <p class="isbn"><strong>ISBN:</strong> ${atlas.isbn_bel}</p>
+                <div class="pdf-buttons">
+                    <button class ="pdf-link" onclick="openModal('${atlas.pdf_bel}')">Открыть BEL</button>
+                    <button class ="pdf-link" onclick="openModal('${atlas.pdf_ru}')">Открыть RU</button>
+                </div>
             </div>
         `;
 
         container.appendChild(card);
     });
 }
+
+
 
 
 
@@ -80,3 +82,58 @@ belBtn.addEventListener('click', () => {
     document.getElementById('intro-text').textContent =
         'Нацыянальны Атлас — гэта сучасны лічбавы рэсурс, які адлюстроўвае геаграфічныя, эканамічныя і культурныя асаблівасці Рэспублікі Беларусь.';
 });
+
+let modalPDF = {
+    pdf: null,
+    currentPage: 1,
+    canvas: null,
+    pageNumEl: null,
+    pageCountEl: null
+};
+
+function openModal(pdfUrl) {
+    document.getElementById('pdf-modal').style.display = 'flex';
+
+    modalPDF.canvas = document.getElementById('modal-pdf-canvas');
+    modalPDF.pageNumEl = document.getElementById('modal-page-num');
+    modalPDF.pageCountEl = document.getElementById('modal-page-count');
+    modalPDF.currentPage = 1;
+
+    pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+        modalPDF.pdf = pdf;
+        modalPDF.pageCountEl.textContent = pdf.numPages;
+        renderModalPage();
+    });
+}
+
+function closeModal() {
+    document.getElementById('pdf-modal').style.display = 'none';
+    modalPDF.pdf = null;
+}
+
+function renderModalPage() {
+    modalPDF.pdf.getPage(modalPDF.currentPage).then(page => {
+        const viewport = page.getViewport({ scale: 1.2 });
+        const canvas = modalPDF.canvas;
+        const context = canvas.getContext('2d');
+
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        page.render({ canvasContext: context, viewport });
+        modalPDF.pageNumEl.textContent = modalPDF.currentPage;
+    });
+}
+
+function prevPage() {
+    if (modalPDF.currentPage <= 1) return;
+    modalPDF.currentPage--;
+    renderModalPage();
+}
+
+function nextPage() {
+    if (modalPDF.currentPage >= modalPDF.pdf.numPages) return;
+    modalPDF.currentPage++;
+    renderModalPage();
+}
+
